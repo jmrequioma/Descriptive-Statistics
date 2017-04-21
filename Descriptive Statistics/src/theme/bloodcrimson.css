@@ -1,0 +1,42 @@
+.root {
+	-fx-background-color: linear-gradient(#400000, #000000);
+	-fx-color: #ff0000;
+}
+
+.label {
+	-fx-text-fill: #fdfbfb;
+}
+
+.button {
+	-fx-background-color: linear-gradient(#ff0000, #800000);
+	-fx-text-fill: #fdfbfb;
+	-fx-background-radius: 6;
+}
+
+.button:hover {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-background-radius: 3px, 3px, 2px, 1px;
+    -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
+    -fx-text-fill: -fx-text-base-color;
+    -fx-alignment: CENTER;
+    -fx-content-display: LEFT;
+}
+
+.chart-pie-label-line {
+    -fx-stroke: #ff0000;
+    -fx-fill: #ff0000;
+}
+ 
+.chart-pie-label {
+    -fx-fill: #ff0000;
+    -fx-font-size: 1em;
+} 
+.chart-legend {
+   -fx-background-color:  #fafad2;
+   -fx-color: #daa520;
+}
+
+.chart-legend-item  {
+    -fx-text-fill: #191970;
+}
