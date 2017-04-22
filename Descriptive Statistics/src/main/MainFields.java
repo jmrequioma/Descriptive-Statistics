@@ -12,6 +12,9 @@ public class MainFields {
 	private static String title;
 	private static boolean valid;
 	private static boolean intExists;
+	private static boolean mean;
+	private static boolean mode;
+	private static boolean median;
 	private static boolean floatExists;
 	private static ArrayList<Integer> sampleDataInt;
 	private static ArrayList<String> fusedData;
@@ -56,6 +59,30 @@ public class MainFields {
 		MainFields.valid = valid;
 	}
 	
+	public static boolean isMean() {
+		return mean;
+	}
+
+	public static void setMean(boolean mean) {
+		MainFields.mean = mean;
+	}
+
+	public static boolean isMode() {
+		return mode;
+	}
+
+	public static void setMode(boolean mode) {
+		MainFields.mode = mode;
+	}
+
+	public static boolean isMedian() {
+		return median;
+	}
+
+	public static void setMedian(boolean median) {
+		MainFields.median = median;
+	}
+
 	public static ArrayList<Integer> getSampleDataInt() {
 		return sampleDataInt;
 	}

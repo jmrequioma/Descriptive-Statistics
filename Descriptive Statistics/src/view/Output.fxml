@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controller.OutputController">
+   <children>
+      <Label layoutX="88.0" layoutY="21.0" text="Mean:" />
+      <TableView fx:id="meanTable" layoutX="146.0" layoutY="38.0" prefHeight="129.0" prefWidth="308.0">
+        <columns>
+          <TableColumn fx:id="meanCol" prefWidth="75.0" text="Mean" />
+          <TableColumn fx:id="varCol" prefWidth="104.0" text="Variance" />
+            <TableColumn fx:id="sdCol" prefWidth="127.0" text="Standard Deviation" />
+        </columns>
+      </TableView>
+      <Label layoutX="83.0" layoutY="176.0" text="Median:" />
+      <TableView fx:id="medianTable" layoutX="146.0" layoutY="193.0" prefHeight="129.0" prefWidth="308.0">
+         <columns>
+            <TableColumn fx:id="medCol" prefWidth="156.0" text="Median" />
+            <TableColumn fx:id="rangeCol" minWidth="0.0" prefWidth="151.0" text="Range" />
+         </columns>
+      </TableView>
+      <Label layoutX="88.0" layoutY="333.0" text="Mode:" />
+      <TableView fx:id="modeTable" layoutX="146.0" layoutY="350.0" prefHeight="129.0" prefWidth="308.0">
+         <columns>
+            <TableColumn fx:id="modeCol" prefWidth="156.0" text="Mode" />
+            <TableColumn fx:id="charCol" minWidth="0.0" prefWidth="151.0" text="Characteristic" />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>

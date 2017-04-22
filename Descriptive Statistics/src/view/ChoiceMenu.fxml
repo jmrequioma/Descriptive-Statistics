@@ -5,10 +5,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="200.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.111" fx:controller="controller.ChoiceMenuController">
+<AnchorPane prefHeight="233.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ChoiceMenuController">
    <children>
-      <Button layoutX="-111.0" layoutY="-187.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="btnConfirm" layoutX="160.0" layoutY="176.0" mnemonicParsing="false" onAction="#confirmClick" text="Confirm" />
       <Label layoutX="167.0" layoutY="23.0" text="Choices:" />
       <CheckBox fx:id="mean" layoutX="153.0" layoutY="56.0" mnemonicParsing="false" onAction="#hasChoice" text="Mean" />
       <CheckBox fx:id="all" layoutX="153.0" layoutY="136.0" mnemonicParsing="false" onAction="#allClicked" selected="true" text="All Measures" />
