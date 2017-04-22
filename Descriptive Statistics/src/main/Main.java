@@ -15,6 +15,7 @@ public class Main extends Application {
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/theme/bloodcrimson.css").toExternalForm());
 			primaryStage.setScene(scene);
+			primaryStage.setTitle("Descriptive Statistics");
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
