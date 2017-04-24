@@ -1,6 +1,7 @@
 package controller;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ResourceBundle;
@@ -30,16 +31,20 @@ public class OutputController implements Initializable {
 	@FXML
 	private TableColumn<Median, String> rangeCol;
 	@FXML
-	private TableView modeTable;
+	private TableView<Median> modeTable;
 	@FXML
-	private TableColumn modeCol;
+	private TableColumn<Median, String> modeCol;
 	@FXML
-	private TableColumn charCol;
+	private TableColumn<Median, String> charCol;
 	
 	private ArrayList<Float> copy = new ArrayList<Float>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		if (MainFields.getDataType() == "Float") {
+			for (int i = 0; i < MainFields.getSampleDataFloat().size(); i++) {
+				copy.add(MainFields.getSampleDataFloat().get(i));
+			}
+			Collections.sort(copy);
 			if (MainFields.isMean()) {
 				double meanInt = calculateMean(MainFields.getSampleDataFloat());
 				for (int i = 0; i < MainFields.getSampleDataFloat().size(); i++) {
@@ -47,6 +52,10 @@ public class OutputController implements Initializable {
 				}
 				double meanVar = calculateVariance(meanInt, MainFields.getSampleDataFloat());
 				double meanStanDev = Math.sqrt(meanVar);
+				DecimalFormat df = new DecimalFormat("#.###");  
+				meanVar = Double.valueOf(df.format(meanVar));
+				meanStanDev = Double.valueOf(df.format(meanStanDev));
+				meanInt = Double.valueOf(df.format(meanStanDev));
 				presentMean(meanInt, meanVar, meanStanDev);
 				meanCol.setCellValueFactory(new PropertyValueFactory
 						<Mean, String>("mean"));
@@ -56,12 +65,47 @@ public class OutputController implements Initializable {
 						<Mean, String>("stanDev"));
 			}
 			if (MainFields.isMedian()) {
-				for (int i = 0; i < MainFields.getSampleDataFloat().size(); i++) {
-					copy.add(MainFields.getSampleDataFloat().get(i));
-				}
-				Collections.sort(copy);
 				double range = (copy.get(copy.size() - 1) - copy.get(0));
-				//double median = 
+				double median;
+				if (copy.size() % 2 > 0) {
+					// odd
+					median = copy.get(((copy.size() + 1) / 2) - 1);
+				} else {
+					// even
+					double firstMed = copy.get((copy.size() / 2) - 1);
+					double secondMed = copy.get(copy.size() / 2);
+					System.out.println("firstMed: " + firstMed);
+					System.out.println("secondMed: " + secondMed);
+					median = ((firstMed + secondMed) / 2);
+				}
+				presentMedian(median, range);
+				medCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("median"));
+				rangeCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("range"));
+			}
+			if (MainFields.isMode()) {
+				ArrayList<Float> modes = new ArrayList<Float>();
+				modes = mode(copy);
+				String strModes = "";
+				String chara = "";
+				for (int i = 0; i < modes.size(); i++) {
+					strModes += modes.get(i).toString();
+				}
+				if (modes.size() == 0) {
+					chara = "No mode";
+				} else if (modes.size() == 1) {
+					chara = "Unimodal";
+				} else if (modes.size() == 2) {
+					chara = "Bimodal";
+				} else {
+					chara = "Multi-modal";
+				}
+				presentMode(strModes, chara);
+				modeCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("median"));
+				charCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("range"));
 			}
 		} else {
 			if (MainFields.isMean()) {
@@ -75,6 +119,10 @@ public class OutputController implements Initializable {
 				}
 				double meanVar = calculateVariance(MainFields.getSampleDataInt(), meanInt);
 				double meanStanDev = Math.sqrt(meanVar);
+				DecimalFormat df = new DecimalFormat("#.###");  
+				meanVar = Double.valueOf(df.format(meanVar));
+				meanStanDev = Double.valueOf(df.format(meanStanDev));
+				meanInt = Double.valueOf(df.format(meanStanDev));
 				presentMean(meanInt, meanVar, meanStanDev);
 				meanCol.setCellValueFactory(new PropertyValueFactory
 						<Mean, String>("mean"));
@@ -82,6 +130,31 @@ public class OutputController implements Initializable {
 						<Mean, String>("variance"));
 				sdCol.setCellValueFactory(new PropertyValueFactory
 						<Mean, String>("stanDev"));
+			}
+			if (MainFields.isMedian()) {
+				ArrayList<Integer> copy = new ArrayList<Integer>();
+				for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
+					copy.add(MainFields.getSampleDataInt().get(i));
+				}
+				Collections.sort(copy);
+				double range = (copy.get(copy.size() - 1) - copy.get(0));
+				double median;
+				if (copy.size() % 2 > 0) {
+					// odd
+					median = copy.get(((copy.size() + 1) / 2) - 1);
+				} else {
+					// even
+					double firstMed = copy.get((copy.size() / 2) - 1);
+					double secondMed = copy.get(copy.size() / 2);
+					System.out.println("firstMed: " + firstMed);
+					System.out.println("secondMed: " + secondMed);
+					median = ((firstMed + secondMed) / 2);
+				}
+				presentMedian(median, range);
+				medCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("median"));
+				rangeCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("range"));
 			}
 		}
 	}
@@ -114,4 +187,35 @@ public class OutputController implements Initializable {
 		meanTable.getItems().add(
 				new Mean(String.valueOf(mean), String.valueOf(variance), String.valueOf(stanDev)));
 	}
+	
+	private void presentMedian(double median, double range) {
+		medianTable.getItems().add(
+				new Median(String.valueOf(median), String.valueOf(range)));
+	}
+	
+	private void presentMode(String modes, String chara) {
+		modeTable.getItems().add(
+				new Median(modes, chara));
+	}
+	
+	private ArrayList<Float> mode(ArrayList<Float> a){
+		  ArrayList<Float> modes = new ArrayList<Float>();
+		  int maxCount=0;
+		  for (int i = 0; i < a.size(); ++i){
+		    int count = 0;
+		    for (int j = 0; j < a.size(); ++j){
+		      if (a.get(j).equals(a.get(i))) {
+		    	  ++count;
+		      }
+		    }
+		    if (count > maxCount){
+		      maxCount = count;
+		      modes.clear();
+		      modes.add(a.get(i));
+		    } else if ( count == maxCount ){
+		      modes.add(a.get(i));
+		    }
+		  }
+		  return modes;
+		}
 }
