@@ -68,7 +68,7 @@ public class InputDataController {
 	public void confirmSampleDataClick(ActionEvent event) throws IOException {
 		String dataType = MainFields.getDataType();
 		if (dataType == "Float") {
-			if (MainFields.getSampleDataFloat().size() == 0) {
+			if (sampleDatasFloat.size() == 0) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Critical Error");
 				alert.setHeaderText("Invalid Click!!!");
@@ -85,7 +85,7 @@ public class InputDataController {
 				stage.show();
 			}
 		} else {
-			if (MainFields.getSampleDataInt().size() == 0) {
+			if (sampleDatasInt.size() == 0) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("Critical Error");
 				alert.setHeaderText("Invalid Click!!!");
