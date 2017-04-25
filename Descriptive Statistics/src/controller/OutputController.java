@@ -4,6 +4,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -38,6 +39,8 @@ public class OutputController implements Initializable {
 	private TableColumn<Median, String> charCol;
 	
 	private ArrayList<Float> copy = new ArrayList<Float>();
+	List<List<Integer>> modes2 = new ArrayList<List<Integer>>();
+	List<List<Float>> dummy = new ArrayList<List<Float>>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		if (MainFields.getDataType() == "Float") {
@@ -85,18 +88,28 @@ public class OutputController implements Initializable {
 						<Median, String>("range"));
 			}
 			if (MainFields.isMode()) {
-				ArrayList<Float> modes = new ArrayList<Float>();
-				modes = mode(copy);
-				String strModes = "";
-				String chara = "";
+				List<List<Float>> modes = new ArrayList<List<Float>>();
+				ArrayList<Integer> indices = new ArrayList<Integer>();
+				
+				//modes = mode(copy);
+				indices = lastOccurencesIndex(copy, MainFields.getSampleDataInt());
+				modes = groupData(indices, copy);
+				System.out.println("Checking: ");
 				for (int i = 0; i < modes.size(); i++) {
-					strModes += modes.get(i).toString();
+					for (int j = 0; j < modes.get(i).size(); j++) {
+						System.out.print(modes.get(i).get(j) + " ");
+					}
+					System.out.println();
 				}
-				if (modes.size() == 0) {
+				String strModes = getModes(modes, modes2);
+				int modeCtr = countModes(strModes);
+				System.out.println("strModes: " + strModes);
+				String chara = "";
+				if (modeCtr == 0) {
 					chara = "No mode";
-				} else if (modes.size() == 1) {
+				} else if (modeCtr == 1) {
 					chara = "Unimodal";
-				} else if (modes.size() == 2) {
+				} else if (modeCtr == 2) {
 					chara = "Bimodal";
 				} else {
 					chara = "Multi-modal";
@@ -157,6 +170,43 @@ public class OutputController implements Initializable {
 						<Median, String>("range"));
 			}
 		}
+		if (MainFields.isMode()) {
+			List<List<Integer>> modes = new ArrayList<List<Integer>>();
+			ArrayList<Integer> copy = new ArrayList<Integer>();
+			for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
+				copy.add(MainFields.getSampleDataInt().get(i));
+			}
+			ArrayList<Integer> indices = new ArrayList<Integer>();
+			
+			//modes = mode(copy);
+			indices = lastOccurencesIndex(MainFields.getSampleDataFloat(), copy);
+			modes = groupData(copy, indices);
+			System.out.println("Checking: ");
+			for (int i = 0; i < modes.size(); i++) {
+				for (int j = 0; j < modes.get(i).size(); j++) {
+					System.out.print(modes.get(i).get(j) + " ");
+				}
+				System.out.println();
+			}
+			String strModes = getModes(dummy, modes);
+			int modeCtr = countModes(strModes);
+			System.out.println("strModes: " + strModes);
+			String chara = "";
+			if (modeCtr == 0) {
+				chara = "No mode";
+			} else if (modeCtr == 1) {
+				chara = "Unimodal";
+			} else if (modeCtr == 2) {
+				chara = "Bimodal";
+			} else {
+				chara = "Multi-modal";
+			}
+			presentMode(strModes, chara);
+			modeCol.setCellValueFactory(new PropertyValueFactory
+					<Median, String>("median"));
+			charCol.setCellValueFactory(new PropertyValueFactory
+					<Median, String>("range"));
+		}
 	}
 	
 	private double calculateMean(ArrayList<Float> data) {
@@ -198,24 +248,117 @@ public class OutputController implements Initializable {
 				new Median(modes, chara));
 	}
 	
-	private ArrayList<Float> mode(ArrayList<Float> a){
-		  ArrayList<Float> modes = new ArrayList<Float>();
-		  int maxCount=0;
-		  for (int i = 0; i < a.size(); ++i){
-		    int count = 0;
-		    for (int j = 0; j < a.size(); ++j){
-		      if (a.get(j).equals(a.get(i))) {
-		    	  ++count;
-		      }
-		    }
-		    if (count > maxCount){
-		      maxCount = count;
-		      modes.clear();
-		      modes.add(a.get(i));
-		    } else if ( count == maxCount ){
-		      modes.add(a.get(i));
-		    }
-		  }
-		  return modes;
+	private ArrayList<Integer> lastOccurencesIndex(ArrayList<Float> data1, ArrayList<Integer> data2) {
+		if (MainFields.getDataType() == "Float") {
+			ArrayList<Integer> index = new ArrayList<Integer>();
+			for (int i = 1; i < data1.size(); i++) {
+				float dataPointed = data1.get(i);
+				float prevData = data1.get(i - 1);
+				if (dataPointed != prevData) {
+					index.add(i - 1);
+				}
+			}
+			index.add(data1.size() - 1);
+			return index;
+		} else {
+			ArrayList<Integer> index = new ArrayList<Integer>();
+			for (int i = 1; i < data2.size(); i++) {
+				int dataPointed = data2.get(i);
+				int prevData = data2.get(i - 1);
+				if (dataPointed != prevData) {
+					index.add(i - 1);
+				}
+			}
+			index.add(data2.size() - 1);
+			return index;
 		}
+	}
+	// for float
+	private List<List<Float>> groupData(ArrayList<Integer> index, List<Float> sortedSamplingFrameCopy ) {
+		List<List<Float>> groupedData = new ArrayList<List<Float>>();
+		for (int i = 0; i < index.size(); i++) {
+			ArrayList<Float> bucket = new ArrayList<Float>();
+			int start;
+			if (i == 0) {
+				start = 0;
+			} else {
+				start = index.get(i - 1) + 1;
+			}
+			for (int j = start; j <= index.get(i); j++) {
+				bucket.add(sortedSamplingFrameCopy.get(j));
+			}
+			groupedData.add(bucket);
+		}
+		
+		return groupedData;
+	}
+	// for int
+	private List<List<Integer>> groupData(List<Integer> sortedSamplingFrameCopy, ArrayList<Integer> index) {
+		List<List<Integer>> groupedData = new ArrayList<List<Integer>>();
+		for (int i = 0; i < index.size(); i++) {
+			ArrayList<Integer> bucket = new ArrayList<Integer>();
+			int start;
+			if (i == 0) {
+				start = 0;
+			} else {
+				start = index.get(i - 1) + 1;
+			}
+			for (int j = start; j <= index.get(i); j++) {
+				bucket.add(sortedSamplingFrameCopy.get(j));
+			}
+			groupedData.add(bucket);
+		}
+		
+		return groupedData;
+	}
+	// for float
+	private String getModes(List<List<Float>> groupedData, List<List<Integer>> groupedData2) {
+		for (int i = 0; i < groupedData.size(); i++) {
+			for (int j = 0; j < groupedData.get(i).size(); j++) {
+				System.out.println(groupedData.get(i).get(j));
+			}
+		}
+		if (MainFields.getDataType() == "Float") {
+			String strModes = "";
+			int size = 2;
+			for (int i = 0; i < groupedData.size(); i++) {
+				if (groupedData.get(i).size() >= size) {
+					size = groupedData.get(i).size();
+					System.out.println("hello: " + groupedData.get(i));
+				}
+			}
+			// we already know the largest size
+			for (int i = 0; i < groupedData.size(); i++) {
+				if (groupedData.get(i).size() == size) {
+					
+					strModes += (String.valueOf(groupedData.get(i).get(0)) + ", ");
+				}
+			}
+			return strModes;
+		} else {
+			String strModes = "";
+			int size = 1;
+			for (int i = 0; i < groupedData2.size(); i++) {
+				if (groupedData2.get(i).size() > size) {
+					size = groupedData2.get(i).size();
+				}
+			}
+			// we already know the largest size
+			for (int i = 0; i < groupedData2.size(); i++) {
+				if (groupedData2.get(i).size() == size) {
+					strModes += (String.valueOf(groupedData2.get(i).get(0).toString() + ", "));
+				}
+			}
+			return strModes;
+		}
+	}
+	private int countModes(String strMode) {
+		int counter = 0;
+		for(int i = 0; i < strMode.length(); i++ ) {
+		    if(strMode.charAt(i) == ',' ) {
+		        counter++;
+		    } 
+		}
+		return counter;
+	}
 }
