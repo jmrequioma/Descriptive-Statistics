@@ -105,7 +105,7 @@ public class OutputController implements Initializable {
 				int modeCtr = countModes(strModes);
 				System.out.println("strModes: " + strModes);
 				String chara = "";
-				if (modeCtr == 0) {
+				if (modeCtr == 0 || checkEqualSize(0, modes)) {
 					chara = "No mode";
 				} else if (modeCtr == 1) {
 					chara = "Unimodal";
@@ -113,6 +113,9 @@ public class OutputController implements Initializable {
 					chara = "Bimodal";
 				} else {
 					chara = "Multi-modal";
+				}
+				if (chara == "No mode") {
+					strModes = "";
 				}
 				presentMode(strModes, chara);
 				modeCol.setCellValueFactory(new PropertyValueFactory
@@ -176,6 +179,7 @@ public class OutputController implements Initializable {
 			for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
 				copy.add(MainFields.getSampleDataInt().get(i));
 			}
+			Collections.sort(copy);
 			ArrayList<Integer> indices = new ArrayList<Integer>();
 			
 			//modes = mode(copy);
@@ -192,7 +196,7 @@ public class OutputController implements Initializable {
 			int modeCtr = countModes(strModes);
 			System.out.println("strModes: " + strModes);
 			String chara = "";
-			if (modeCtr == 0) {
+			if (modeCtr == 0 || checkEqualSize(modes, 0)) {
 				chara = "No mode";
 			} else if (modeCtr == 1) {
 				chara = "Unimodal";
@@ -200,6 +204,9 @@ public class OutputController implements Initializable {
 				chara = "Bimodal";
 			} else {
 				chara = "Multi-modal";
+			}
+			if (chara == "No mode") {
+				strModes = "";
 			}
 			presentMode(strModes, chara);
 			modeCol.setCellValueFactory(new PropertyValueFactory
@@ -352,6 +359,7 @@ public class OutputController implements Initializable {
 			return strModes;
 		}
 	}
+	
 	private int countModes(String strMode) {
 		int counter = 0;
 		for(int i = 0; i < strMode.length(); i++ ) {
@@ -360,5 +368,33 @@ public class OutputController implements Initializable {
 		    } 
 		}
 		return counter;
+	}
+	
+	private boolean checkEqualSize(List<List<Integer>> modes, int dummy) {
+		int ctr = 0;
+		for (int i = 1; i < modes.size(); i++) {
+			if (modes.get(i).size() == modes.get(i - 1).size()) {
+				ctr++; 
+			}
+		}
+		if (ctr == (modes.size() - 1)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean checkEqualSize(int dummy, List<List<Float>> modes) {
+		int ctr = 0;
+		for (int i = 1; i < modes.size(); i++) {
+			if (modes.get(i).size() == modes.get(i - 1).size()) {
+				ctr++; 
+			}
+		}
+		if (ctr == (modes.size() - 1)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
