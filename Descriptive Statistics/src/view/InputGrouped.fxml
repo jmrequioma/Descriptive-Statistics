@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="207.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.InputGroupedController">
+   <children>
+      <Button layoutX="-56.0" layoutY="-195.0" mnemonicParsing="false" text="Button" />
+      <TextField fx:id="txtFInputK" layoutX="18.0" layoutY="14.0" prefHeight="35.0" prefWidth="465.0" promptText="Input Number of Class Intervals" />
+      <RadioButton fx:id="closedRBtn" layoutX="18.0" layoutY="67.0" mnemonicParsing="false" selected="true" text="Closed Intervals">
+         <toggleGroup>
+            <ToggleGroup fx:id="groupedChoices" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="fOpenRBtn" layoutX="229.0" layoutY="67.0" mnemonicParsing="false" text="Open Interval (First Class)" toggleGroup="$groupedChoices" />
+      <RadioButton fx:id="lOpenRBtn" layoutX="229.0" layoutY="96.0" mnemonicParsing="false" text="Open Interval (Last Class)" toggleGroup="$groupedChoices" />
+      <RadioButton fx:id="bOpenRBtn" layoutX="229.0" layoutY="126.0" mnemonicParsing="false" text="Open Interval (First &amp; Last Classes)" toggleGroup="$groupedChoices" />
+      <Button fx:id="btnConfirm" layoutX="224.0" layoutY="168.0" mnemonicParsing="false" onAction="#confirmClick" text="Confirm" />
+   </children>
+</AnchorPane>

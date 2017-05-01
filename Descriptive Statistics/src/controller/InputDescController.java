@@ -57,15 +57,27 @@ public class InputDescController implements Initializable {
 			} else {
 				MainFields.setDataType("Float");
 			}
-			MainFields.setTitle(title);
-			Stage ownerStage = (Stage) stage.getOwner();
-			Parent root = FXMLLoader.load(getClass().getResource("/view/InputData.fxml"));
-			Scene scene = new Scene(root);
-			scene.getStylesheets().add("/theme/bloodcrimson.css");
-			ownerStage.setScene(scene);
-			ownerStage.setResizable(false);
-			ownerStage.show();
-			stage.close();
+			if (MainFields.getType() == "Ungrouped") {
+				MainFields.setTitle(title);
+				Stage ownerStage = (Stage) stage.getOwner();
+				Parent root = FXMLLoader.load(getClass().getResource("/view/InputData.fxml"));
+				Scene scene = new Scene(root);
+				scene.getStylesheets().add("/theme/bloodcrimson.css");
+				ownerStage.setScene(scene);
+				ownerStage.setResizable(false);
+				ownerStage.show();
+				stage.close();
+			} else {
+				MainFields.setTitle(title);
+				Stage ownerStage = (Stage) stage.getOwner();
+				Parent root = FXMLLoader.load(getClass().getResource("/view/InputGrouped.fxml"));
+				Scene scene = new Scene(root);
+				scene.getStylesheets().add("/theme/bloodcrimson.css");
+				ownerStage.setScene(scene);
+				ownerStage.setResizable(false);
+				ownerStage.show();
+				stage.close();
+			}
 		}
 	}
 	// Event Listener on Button[#btnBack].onAction

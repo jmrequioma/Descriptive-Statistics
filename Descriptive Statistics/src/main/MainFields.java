@@ -26,7 +26,9 @@ public class MainFields {
 	private static ArrayList<String> midpoints;
 	private static ArrayList<Integer> frequencies;
 	private static ArrayList<Float> percentages;
-
+	private static int intervalCase;   // 0 for closed, 1 for open first, 2 for open last, 3 for open both
+	private static int groupedDataK;
+	
 	public static String getType() {
 		return type;
 	}
@@ -177,6 +179,22 @@ public class MainFields {
 
 	public static void setFloatExists(boolean floatExists) {
 		MainFields.floatExists = floatExists;
+	}
+	
+	public static int getGroupedDataK() {
+		return groupedDataK;
+	}
+	
+	public static void setGroupedDataK(int groupedDataK) {
+		MainFields.groupedDataK = groupedDataK;
+	}
+	
+	public static int getIntervalCase() {
+		return intervalCase;
+	}
+	
+	public static void setIntervalCase(int intervalCase) {
+		MainFields.intervalCase = intervalCase;
 	}
 	
 	public static void reset() {
