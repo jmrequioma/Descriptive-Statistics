@@ -185,7 +185,7 @@ public class MainFields {
 		title = "";
 		valid = false;
 		sampleDataInt.clear();
-		fusedData.clear();
+		//fusedData.clear();
 		dataCount.clear();
 		dataPercentage.clear();
 		sampleDataFloat.clear();
@@ -194,6 +194,12 @@ public class MainFields {
 		midpoints.clear();
 		frequencies.clear();
 		percentages.clear();
+	}
+	
+	public static void resetChoices() {
+		mean = false;
+		median = false;
+		mode = false;
 	}
 }
 

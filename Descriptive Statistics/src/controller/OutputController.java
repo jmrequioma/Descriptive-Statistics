@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -7,13 +8,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import main.MainFields;
 import main.Mean;
 import main.Median;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 
 public class OutputController implements Initializable {
@@ -37,63 +44,159 @@ public class OutputController implements Initializable {
 	private TableColumn<Median, String> modeCol;
 	@FXML
 	private TableColumn<Median, String> charCol;
+	@FXML
+	private Button returnBtn;
+	@FXML
+	private Button execBtn;
 	
 	private ArrayList<Float> copy = new ArrayList<Float>();
 	List<List<Integer>> modes2 = new ArrayList<List<Integer>>();
 	List<List<Float>> dummy = new ArrayList<List<Float>>();
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		if (MainFields.getDataType() == "Float") {
-			for (int i = 0; i < MainFields.getSampleDataFloat().size(); i++) {
-				copy.add(MainFields.getSampleDataFloat().get(i));
-			}
-			Collections.sort(copy);
-			if (MainFields.isMean()) {
-				double meanInt = calculateMean(MainFields.getSampleDataFloat());
+		if (MainFields.getType() == "Ungrouped") {
+			if (MainFields.getDataType() == "Float") {
 				for (int i = 0; i < MainFields.getSampleDataFloat().size(); i++) {
-					System.out.println("hi " + MainFields.getSampleDataFloat().get(i));
+					copy.add(MainFields.getSampleDataFloat().get(i));
 				}
-				double meanVar = calculateVariance(meanInt, MainFields.getSampleDataFloat());
-				double meanStanDev = Math.sqrt(meanVar);
-				DecimalFormat df = new DecimalFormat("#.###");  
-				meanVar = Double.valueOf(df.format(meanVar));
-				meanStanDev = Double.valueOf(df.format(meanStanDev));
-				meanInt = Double.valueOf(df.format(meanStanDev));
-				presentMean(meanInt, meanVar, meanStanDev);
-				meanCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("mean"));
-				varCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("variance"));
-				sdCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("stanDev"));
-			}
-			if (MainFields.isMedian()) {
-				double range = (copy.get(copy.size() - 1) - copy.get(0));
-				double median;
-				if (copy.size() % 2 > 0) {
-					// odd
-					median = copy.get(((copy.size() + 1) / 2) - 1);
-				} else {
-					// even
-					double firstMed = copy.get((copy.size() / 2) - 1);
-					double secondMed = copy.get(copy.size() / 2);
-					System.out.println("firstMed: " + firstMed);
-					System.out.println("secondMed: " + secondMed);
-					median = ((firstMed + secondMed) / 2);
+				Collections.sort(copy);
+				if (MainFields.isMean()) {
+					double meanInt = calculateMean(MainFields.getSampleDataFloat());
+					for (int i = 0; i < MainFields.getSampleDataFloat().size(); i++) {
+						System.out.println("hi " + MainFields.getSampleDataFloat().get(i));
+					}
+					double meanVar = calculateVariance(meanInt, MainFields.getSampleDataFloat());
+					double meanStanDev = Math.sqrt(meanVar);
+					DecimalFormat df = new DecimalFormat("#.###");  
+					meanVar = Double.valueOf(df.format(meanVar));
+					meanStanDev = Double.valueOf(df.format(meanStanDev));
+					meanInt = Double.valueOf(df.format(meanStanDev));
+					presentMean(meanInt, meanVar, meanStanDev);
+					meanCol.setCellValueFactory(new PropertyValueFactory
+							<Mean, String>("mean"));
+					varCol.setCellValueFactory(new PropertyValueFactory
+							<Mean, String>("variance"));
+					sdCol.setCellValueFactory(new PropertyValueFactory
+							<Mean, String>("stanDev"));
 				}
-				presentMedian(median, range);
-				medCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("median"));
-				rangeCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("range"));
+				if (MainFields.isMedian()) {
+					double range = (copy.get(copy.size() - 1) - copy.get(0));
+					double median;
+					if (copy.size() % 2 > 0) {
+						// odd
+						median = copy.get(((copy.size() + 1) / 2) - 1);
+					} else {
+						// even
+						double firstMed = copy.get((copy.size() / 2) - 1);
+						double secondMed = copy.get(copy.size() / 2);
+						System.out.println("firstMed: " + firstMed);
+						System.out.println("secondMed: " + secondMed);
+						median = ((firstMed + secondMed) / 2);
+					}
+					presentMedian(median, range);
+					medCol.setCellValueFactory(new PropertyValueFactory
+							<Median, String>("median"));
+					rangeCol.setCellValueFactory(new PropertyValueFactory
+							<Median, String>("range"));
+				}
+				if (MainFields.isMode()) {
+					List<List<Float>> modes = new ArrayList<List<Float>>();
+					ArrayList<Integer> indices = new ArrayList<Integer>();
+					
+					//modes = mode(copy);
+					indices = lastOccurencesIndex(copy, MainFields.getSampleDataInt());
+					modes = groupData(indices, copy);
+					System.out.println("Checking: ");
+					for (int i = 0; i < modes.size(); i++) {
+						for (int j = 0; j < modes.get(i).size(); j++) {
+							System.out.print(modes.get(i).get(j) + " ");
+						}
+						System.out.println();
+					}
+					String strModes = getModes(modes, modes2);
+					int modeCtr = countModes(strModes);
+					System.out.println("strModes: " + strModes);
+					String chara = "";
+					if (modeCtr == 0 || checkEqualSize(0, modes)) {
+						chara = "No mode";
+					} else if (modeCtr == 1) {
+						chara = "Unimodal";
+					} else if (modeCtr == 2) {
+						chara = "Bimodal";
+					} else {
+						chara = "Multi-modal";
+					}
+					if (chara == "No mode") {
+						strModes = "";
+					}
+					presentMode(strModes, chara);
+					modeCol.setCellValueFactory(new PropertyValueFactory
+							<Median, String>("median"));
+					charCol.setCellValueFactory(new PropertyValueFactory
+							<Median, String>("range"));
+				}
+			} else {
+				if (MainFields.isMean()) {
+					float totalVal = 0;
+					for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
+						totalVal += MainFields.getSampleDataInt().get(i);
+					}
+					double meanInt = totalVal / MainFields.getSampleDataInt().size();
+					for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
+						System.out.println("hi " + MainFields.getSampleDataInt().get(i));
+					}
+					double meanVar = calculateVariance(MainFields.getSampleDataInt(), meanInt);
+					double meanStanDev = Math.sqrt(meanVar);
+					DecimalFormat df = new DecimalFormat("#.###");  
+					meanVar = Double.valueOf(df.format(meanVar));
+					meanStanDev = Double.valueOf(df.format(meanStanDev));
+					meanInt = Double.valueOf(df.format(meanStanDev));
+					presentMean(meanInt, meanVar, meanStanDev);
+					meanCol.setCellValueFactory(new PropertyValueFactory
+							<Mean, String>("mean"));
+					varCol.setCellValueFactory(new PropertyValueFactory
+							<Mean, String>("variance"));
+					sdCol.setCellValueFactory(new PropertyValueFactory
+							<Mean, String>("stanDev"));
+				}
+				if (MainFields.isMedian()) {
+					ArrayList<Integer> copy = new ArrayList<Integer>();
+					for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
+						copy.add(MainFields.getSampleDataInt().get(i));
+					}
+					Collections.sort(copy);
+					double range = (copy.get(copy.size() - 1) - copy.get(0));
+					double median;
+					if (copy.size() % 2 > 0) {
+						// odd
+						median = copy.get(((copy.size() + 1) / 2) - 1);
+					} else {
+						// even
+						double firstMed = copy.get((copy.size() / 2) - 1);
+						double secondMed = copy.get(copy.size() / 2);
+						System.out.println("firstMed: " + firstMed);
+						System.out.println("secondMed: " + secondMed);
+						median = ((firstMed + secondMed) / 2);
+					}
+					presentMedian(median, range);
+					medCol.setCellValueFactory(new PropertyValueFactory
+							<Median, String>("median"));
+					rangeCol.setCellValueFactory(new PropertyValueFactory
+							<Median, String>("range"));
+				}
 			}
 			if (MainFields.isMode()) {
-				List<List<Float>> modes = new ArrayList<List<Float>>();
+				List<List<Integer>> modes = new ArrayList<List<Integer>>();
+				ArrayList<Integer> copy = new ArrayList<Integer>();
+				for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
+					copy.add(MainFields.getSampleDataInt().get(i));
+				}
+				Collections.sort(copy);
 				ArrayList<Integer> indices = new ArrayList<Integer>();
 				
 				//modes = mode(copy);
-				indices = lastOccurencesIndex(copy, MainFields.getSampleDataInt());
-				modes = groupData(indices, copy);
+				indices = lastOccurencesIndex(MainFields.getSampleDataFloat(), copy);
+				modes = groupData(copy, indices);
 				System.out.println("Checking: ");
 				for (int i = 0; i < modes.size(); i++) {
 					for (int j = 0; j < modes.get(i).size(); j++) {
@@ -101,11 +204,11 @@ public class OutputController implements Initializable {
 					}
 					System.out.println();
 				}
-				String strModes = getModes(modes, modes2);
+				String strModes = getModes(dummy, modes);
 				int modeCtr = countModes(strModes);
 				System.out.println("strModes: " + strModes);
 				String chara = "";
-				if (modeCtr == 0 || checkEqualSize(0, modes)) {
+				if (modeCtr == 0 || checkEqualSize(modes, 0)) {
 					chara = "No mode";
 				} else if (modeCtr == 1) {
 					chara = "Unimodal";
@@ -124,95 +227,7 @@ public class OutputController implements Initializable {
 						<Median, String>("range"));
 			}
 		} else {
-			if (MainFields.isMean()) {
-				float totalVal = 0;
-				for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
-					totalVal += MainFields.getSampleDataInt().get(i);
-				}
-				double meanInt = totalVal / MainFields.getSampleDataInt().size();
-				for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
-					System.out.println("hi " + MainFields.getSampleDataInt().get(i));
-				}
-				double meanVar = calculateVariance(MainFields.getSampleDataInt(), meanInt);
-				double meanStanDev = Math.sqrt(meanVar);
-				DecimalFormat df = new DecimalFormat("#.###");  
-				meanVar = Double.valueOf(df.format(meanVar));
-				meanStanDev = Double.valueOf(df.format(meanStanDev));
-				meanInt = Double.valueOf(df.format(meanStanDev));
-				presentMean(meanInt, meanVar, meanStanDev);
-				meanCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("mean"));
-				varCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("variance"));
-				sdCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("stanDev"));
-			}
-			if (MainFields.isMedian()) {
-				ArrayList<Integer> copy = new ArrayList<Integer>();
-				for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
-					copy.add(MainFields.getSampleDataInt().get(i));
-				}
-				Collections.sort(copy);
-				double range = (copy.get(copy.size() - 1) - copy.get(0));
-				double median;
-				if (copy.size() % 2 > 0) {
-					// odd
-					median = copy.get(((copy.size() + 1) / 2) - 1);
-				} else {
-					// even
-					double firstMed = copy.get((copy.size() / 2) - 1);
-					double secondMed = copy.get(copy.size() / 2);
-					System.out.println("firstMed: " + firstMed);
-					System.out.println("secondMed: " + secondMed);
-					median = ((firstMed + secondMed) / 2);
-				}
-				presentMedian(median, range);
-				medCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("median"));
-				rangeCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("range"));
-			}
-		}
-		if (MainFields.isMode()) {
-			List<List<Integer>> modes = new ArrayList<List<Integer>>();
-			ArrayList<Integer> copy = new ArrayList<Integer>();
-			for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
-				copy.add(MainFields.getSampleDataInt().get(i));
-			}
-			Collections.sort(copy);
-			ArrayList<Integer> indices = new ArrayList<Integer>();
 			
-			//modes = mode(copy);
-			indices = lastOccurencesIndex(MainFields.getSampleDataFloat(), copy);
-			modes = groupData(copy, indices);
-			System.out.println("Checking: ");
-			for (int i = 0; i < modes.size(); i++) {
-				for (int j = 0; j < modes.get(i).size(); j++) {
-					System.out.print(modes.get(i).get(j) + " ");
-				}
-				System.out.println();
-			}
-			String strModes = getModes(dummy, modes);
-			int modeCtr = countModes(strModes);
-			System.out.println("strModes: " + strModes);
-			String chara = "";
-			if (modeCtr == 0 || checkEqualSize(modes, 0)) {
-				chara = "No mode";
-			} else if (modeCtr == 1) {
-				chara = "Unimodal";
-			} else if (modeCtr == 2) {
-				chara = "Bimodal";
-			} else {
-				chara = "Multi-modal";
-			}
-			if (chara == "No mode") {
-				strModes = "";
-			}
-			presentMode(strModes, chara);
-			modeCol.setCellValueFactory(new PropertyValueFactory
-					<Median, String>("median"));
-			charCol.setCellValueFactory(new PropertyValueFactory
-					<Median, String>("range"));
 		}
 	}
 	
@@ -396,5 +411,29 @@ public class OutputController implements Initializable {
 		} else {
 			return false;
 		}
+	}
+	
+	public void returnClick(ActionEvent e) throws IOException {
+		MainFields.reset();
+		Parent root = FXMLLoader.load(getClass().getResource("/view/Menu.fxml"));
+		Stage stage = (Stage) returnBtn.getScene().getWindow();
+		stage.setTitle("Menu");
+		stage.setResizable(false);
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add("/theme/bloodcrimson.css");
+		stage.setScene(scene);
+		stage.show();
+	}
+	
+	public void execClick(ActionEvent e) throws IOException {
+		MainFields.resetChoices();
+		Parent root = FXMLLoader.load(getClass().getResource("/view/ChoiceMenu.fxml"));
+		Stage stage = (Stage) execBtn.getScene().getWindow();
+		stage.setTitle("Choices");
+		stage.setResizable(false);
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add("/theme/bloodcrimson.css");
+		stage.setScene(scene);
+		stage.show();
 	}
 }
