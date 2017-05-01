@@ -28,6 +28,9 @@ public class MainFields {
 	private static ArrayList<Float> percentages;
 	private static int intervalCase;   // 0 for closed, 1 for open first, 2 for open last, 3 for open both
 	private static int groupedDataK;
+	private static ArrayList<String> lowerClassLimitsList; // newly added
+	private static ArrayList<String> upperClassLimitsList; // newly added
+	private static ArrayList<String> frequencyList; // newly added
 	
 	public static String getType() {
 		return type;
@@ -197,6 +200,30 @@ public class MainFields {
 		MainFields.intervalCase = intervalCase;
 	}
 	
+	public static ArrayList<String> getLowerClassLimitsList() {
+		return lowerClassLimitsList;
+	}
+
+	public static void setLowerClassLimitsList(ArrayList<String> lowerClassLimitsList) {
+		MainFields.lowerClassLimitsList = lowerClassLimitsList;
+	}
+
+	public static ArrayList<String> getUpperClassLimitsList() {
+		return upperClassLimitsList;
+	}
+
+	public static void setUpperClassLimitsList(ArrayList<String> upperClassLimitsList) {
+		MainFields.upperClassLimitsList = upperClassLimitsList;
+	}
+
+	public static ArrayList<String> getFrequencyList() {
+		return frequencyList;
+	}
+
+	public static void setFrequencyList(ArrayList<String> frequencyList) {
+		MainFields.frequencyList = frequencyList;
+	}
+
 	public static void reset() {
 		//eventBus.unregister(collapseListener);
 		type = "";
