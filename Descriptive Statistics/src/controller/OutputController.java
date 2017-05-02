@@ -70,7 +70,7 @@ public class OutputController implements Initializable {
 					DecimalFormat df = new DecimalFormat("#.###");  
 					meanVar = Double.valueOf(df.format(meanVar));
 					meanStanDev = Double.valueOf(df.format(meanStanDev));
-					meanInt = Double.valueOf(df.format(meanStanDev));
+					meanInt = Double.valueOf(df.format(meanInt));
 					presentMean(meanInt, meanVar, meanStanDev);
 					meanCol.setCellValueFactory(new PropertyValueFactory
 							<Mean, String>("mean"));
@@ -150,7 +150,7 @@ public class OutputController implements Initializable {
 					DecimalFormat df = new DecimalFormat("#.###");  
 					meanVar = Double.valueOf(df.format(meanVar));
 					meanStanDev = Double.valueOf(df.format(meanStanDev));
-					meanInt = Double.valueOf(df.format(meanStanDev));
+					meanInt = Double.valueOf(df.format(meanInt));
 					presentMean(meanInt, meanVar, meanStanDev);
 					meanCol.setCellValueFactory(new PropertyValueFactory
 							<Mean, String>("mean"));
@@ -234,7 +234,7 @@ public class OutputController implements Initializable {
 				DecimalFormat df = new DecimalFormat("#.###");
 				meanVar = Double.valueOf(df.format(meanVar));
 				meanStanDev = Double.valueOf(df.format(meanStanDev));
-				meanInt = Double.valueOf(df.format(meanStanDev));
+				meanInt = Double.valueOf(df.format(meanInt));
 				presentMean(meanInt, meanVar, meanStanDev);
 				meanCol.setCellValueFactory(new PropertyValueFactory
 						<Mean, String>("mean"));
