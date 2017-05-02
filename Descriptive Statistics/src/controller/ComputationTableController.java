@@ -1,14 +1,20 @@
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import main.GroupedData;
 import main.MainFields;
 
@@ -21,6 +27,7 @@ public class ComputationTableController implements Initializable {
 	@FXML private TableColumn<GroupedData, String> classMarks;
 	@FXML private TableColumn<GroupedData, String> fixi;
 	@FXML private TableColumn<GroupedData, String> fixi2;
+	@FXML private Button btnContinue;
 	private ArrayList<String> classMarksList = new ArrayList<String>();
 	private ArrayList<String> fixiList = new ArrayList<String>();
 	private ArrayList<String> fixi2List = new ArrayList<String>();
@@ -121,7 +128,15 @@ public class ComputationTableController implements Initializable {
 	}
 	
 	@FXML
-	private void continueClick() {
+	private void continueClick() throws IOException {
 		// Computation table ends here
+		Parent root = FXMLLoader.load(getClass().getResource("/view/ChoiceMenu.fxml"));
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add("/theme/bloodcrimson.css");
+		Stage stage = (Stage) btnContinue.getScene().getWindow();
+		stage.setTitle("Choices");
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.show();
 	}
 }

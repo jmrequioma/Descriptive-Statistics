@@ -21,6 +21,6 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Button layoutX="268.0" layoutY="461.0" mnemonicParsing="false" text="Continue" />
+      <Button fx:id="btnContinue" layoutX="268.0" layoutY="461.0" mnemonicParsing="false" onAction="#continueClick" text="Continue" />
    </children>
 </AnchorPane>

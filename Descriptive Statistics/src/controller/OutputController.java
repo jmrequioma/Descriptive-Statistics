@@ -254,6 +254,25 @@ public class OutputController implements Initializable {
 				
 			}
 			
+			if (MainFields.isMean() && MainFields.getIntervalCase() > 0) {
+				String mean = "Mean not computed.";
+				meanTable.getItems().add(
+						new Mean(mean, "No v", "No sd"));
+				meanTable.getItems().add(
+						new Mean(String.valueOf(mean), "", ""));
+				meanCol.setCellValueFactory(new PropertyValueFactory
+						<Mean, String>("mean"));
+			}
+			
+			if (MainFields.isMedian() && MainFields.getIntervalCase() > 0) {
+				String median = "Median not computed.";
+				medianTable.getItems().add(
+						new Median(median, "No v"));
+				medianTable.getItems().add(
+						new Median(median, ""));
+				medCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("median"));
+			}
 		}
 	}
 	
