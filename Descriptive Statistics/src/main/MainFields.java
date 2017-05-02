@@ -18,8 +18,8 @@ public class MainFields {
 	private static boolean floatExists;
 	private static ArrayList<Integer> sampleDataInt;
 	private static ArrayList<String> fusedData;
-	private static ArrayList<Integer> dataCount;
-	private static ArrayList<Float> dataPercentage;
+//	private static ArrayList<Integer> dataCount;
+//	private static ArrayList<Float> dataPercentage;
 	private static ArrayList<Float> sampleDataFloat;
 	private static ArrayList<String> classLimits;
 	private static ArrayList<String> trueClassLimits;
@@ -32,6 +32,7 @@ public class MainFields {
 	private static ArrayList<String> upperClassLimitsList; // newly added
 	private static ArrayList<String> frequencyList; // newly added
 	private static float fixiTotal;
+	private static float fixi2Total;
 	private static int frequencyTotal;
 	
 	public static String getType() {
@@ -106,21 +107,21 @@ public class MainFields {
 		MainFields.fusedData = fusedData;
 	}
 
-	public static ArrayList<Integer> getDataCount() {
-		return dataCount;
-	}
+//	public static ArrayList<Integer> getDataCount() {
+//		return dataCount;
+//	}
+//
+//	public static void setDataCount(ArrayList<Integer> dataCount) {
+//		MainFields.dataCount = dataCount;
+//	}
 
-	public static void setDataCount(ArrayList<Integer> dataCount) {
-		MainFields.dataCount = dataCount;
-	}
-
-	public static ArrayList<Float> getDataPercentage() {
-		return dataPercentage;
-	}
-
-	public static void setDataPercentage(ArrayList<Float> dataPercentage) {
-		MainFields.dataPercentage = dataPercentage;
-	}
+//	public static ArrayList<Float> getDataPercentage() {
+//		return dataPercentage;
+//	}
+//
+//	public static void setDataPercentage(ArrayList<Float> dataPercentage) {
+//		MainFields.dataPercentage = dataPercentage;
+//	}
 
 	public static ArrayList<Float> getSampleDataFloat() {
 		return sampleDataFloat;
@@ -234,6 +235,14 @@ public class MainFields {
 		MainFields.fixiTotal = fixiTotal;
 	}
 
+	public static float getFixi2Total() {
+		return fixi2Total;
+	}
+
+	public static void setFixi2Total(float fixi2Total) {
+		MainFields.fixi2Total = fixi2Total;
+	}
+
 	public static int getFrequencyTotal() {
 		return frequencyTotal;
 	}
@@ -249,8 +258,8 @@ public class MainFields {
 		valid = false;
 		sampleDataInt.clear();
 		//fusedData.clear();
-		dataCount.clear();
-		dataPercentage.clear();
+		//dataCount.clear();
+		//dataPercentage.clear();
 		sampleDataFloat.clear();
 		classLimits.clear();
 		trueClassLimits.clear();
