@@ -31,6 +31,8 @@ public class MainFields {
 	private static ArrayList<String> lowerClassLimitsList; // newly added
 	private static ArrayList<String> upperClassLimitsList; // newly added
 	private static ArrayList<String> frequencyList; // newly added
+	private static float fixiTotal;
+	private static int frequencyTotal;
 	
 	public static String getType() {
 		return type;
@@ -222,6 +224,22 @@ public class MainFields {
 
 	public static void setFrequencyList(ArrayList<String> frequencyList) {
 		MainFields.frequencyList = frequencyList;
+	}
+
+	public static float getFixiTotal() {
+		return fixiTotal;
+	}
+
+	public static void setFixiTotal(float fixiTotal) {
+		MainFields.fixiTotal = fixiTotal;
+	}
+
+	public static int getFrequencyTotal() {
+		return frequencyTotal;
+	}
+
+	public static void setFrequencyTotal(int frequencyTotal) {
+		MainFields.frequencyTotal = frequencyTotal;
 	}
 
 	public static void reset() {
