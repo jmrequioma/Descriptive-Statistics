@@ -46,13 +46,28 @@ public class ComputationTableController implements Initializable {
 	}
 	
 	private void initFourthToLastColumns() {
+		String classMark;
+		String fixi;
+		String fixi2;
+		
 		for(int i = 0; i < MainFields.getGroupedDataK(); i++) {
-			String classMark = String.valueOf((Float.valueOf(MainFields.getLowerClassLimitsList().get(i)) +
-							   Float.valueOf(MainFields.getUpperClassLimitsList().get(i))) / 2);
-			String fixi = String.valueOf(Float.valueOf(classMark) * 
-					      Float.valueOf(MainFields.getFrequencyList().get(i)));
-			String fixi2 = String.valueOf(Float.valueOf(classMark) * 
-				      	   Math.pow(Float.valueOf(MainFields.getFrequencyList().get(i)), 2));
+			if(i == 0 && (MainFields.getIntervalCase() == 1 || 
+					      MainFields.getIntervalCase() == 3) ||
+			  (i == MainFields.getGroupedDataK() - 1 && 
+			  	   (MainFields.getIntervalCase() == 2 || 
+					MainFields.getIntervalCase() == 3))) 
+			{
+				classMark = "-";
+				fixi = "-";
+				fixi2 = "-";
+			} else {
+				classMark = String.valueOf((Float.valueOf(MainFields.getLowerClassLimitsList().get(i)) +
+						    Float.valueOf(MainFields.getUpperClassLimitsList().get(i))) / 2);
+				fixi = String.valueOf(Float.valueOf(classMark) * 
+				       Float.valueOf(MainFields.getFrequencyList().get(i)));
+				fixi2 = String.valueOf(Float.valueOf(classMark) * 
+			      	    Math.pow(Float.valueOf(MainFields.getFrequencyList().get(i)), 2));
+			}
 			
 			classMarksList.add(classMark);
 			fixiList.add(fixi);
@@ -67,16 +82,24 @@ public class ComputationTableController implements Initializable {
 					classMarksList.get(i), fixiList.get(i), fixi2List.get(i)));
 		}
 		
+		populateTotals();	
+	}
+	
+	private void populateTotals() {
 		String frequencyTotal = getTotalInt(MainFields.getFrequencyList());
-		String fixiTotal = getTotalFloat(fixiList);
-		String fixi2Total = getTotalFloat(fixi2List);
-		
+		String fixiTotal = "-";
+		String fixi2Total = "-";
 		MainFields.setFrequencyTotal(Integer.valueOf(frequencyTotal));
-		MainFields.setFixiTotal(Float.valueOf(fixiTotal));
 		
+		if(MainFields.getIntervalCase() == 0) {
+			fixiTotal = getTotalFloat(fixiList);
+			MainFields.setFixiTotal(Float.valueOf(fixiTotal));
+			fixi2Total = getTotalFloat(fixi2List);
+		}
+
 		groupedData.getItems().add(new GroupedData("", "", "total: " + frequencyTotal, "", 
 				"total: " + fixiTotal, "total: " + fixi2Total));
-	}	
+	}
 	
 	private String getTotalInt(ArrayList<String> dataList) {
 		int total = 0;
