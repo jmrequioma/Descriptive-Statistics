@@ -50,9 +50,24 @@ public class InputGroupedDataController implements Initializable {
 	}
 	
 	private void initLists() {
+		System.out.println("Interval casexx: " + MainFields.getIntervalCase());
 		for(int i = 0; i < MainFields.getGroupedDataK(); i++) {
-			lowerClassLimitsList.add("");
-			upperClassLimitsList.add("");
+			if(i == 0 && (MainFields.getIntervalCase() == 1 || 
+						  MainFields.getIntervalCase() == 3)) 
+			{
+				lowerClassLimitsList.add("<=");
+			} else {
+				lowerClassLimitsList.add("");	
+			}
+			
+			if(i == MainFields.getGroupedDataK() - 1 && (MainFields.getIntervalCase() == 2 || 
+					  MainFields.getIntervalCase() == 3)) 
+			{
+				upperClassLimitsList.add(">=");
+			} else {
+				upperClassLimitsList.add("");	
+			}
+			
 			frequencyList.add("");
 		}
 	}
@@ -82,12 +97,22 @@ public class InputGroupedDataController implements Initializable {
 		checkContinueEnable();
 	}
 	
-	private void updateLists(int classInterval, String lowerClassLimit, String upperClassLimit, 
+	private void updateLists(int classIntervalVal, String lowerClassLimit, String upperClassLimit, 
 			String frequency) 
 	{
-		lowerClassLimitsList.set(classInterval - 1, lowerClassLimit);
-		upperClassLimitsList.set(classInterval - 1, upperClassLimit);
-		frequencyList.set(classInterval - 1, frequency);
+		if(classInterval.getValue() != 1 || (MainFields.getIntervalCase() != 1 && 
+				  MainFields.getIntervalCase() != 3)) 
+		{
+			lowerClassLimitsList.set(classIntervalVal - 1, lowerClassLimit);
+		} 
+		
+		if(classInterval.getValue() != MainFields.getGroupedDataK() || (MainFields.getIntervalCase() != 2 && 
+				  MainFields.getIntervalCase() != 3)) 
+		{
+			upperClassLimitsList.set(classIntervalVal - 1, upperClassLimit);
+		}
+		
+		frequencyList.set(classIntervalVal - 1, frequency);
 	}
 	
 	private void updateTable() {
@@ -130,5 +155,32 @@ public class InputGroupedDataController implements Initializable {
 		stage.show();
 	}
 	
+	@FXML
+	private void intervalComboxAction() {
+		if(classInterval.getValue() == 1 && (MainFields.getIntervalCase() == 1 || 
+				  MainFields.getIntervalCase() == 3)) 
+		{
+			lowerClassLimitTxtF.setDisable(true);
+		} else {
+			lowerClassLimitTxtF.setDisable(false);
+		}
+		
+		if(classInterval.getValue() == MainFields.getGroupedDataK() && (MainFields.getIntervalCase() == 2 || 
+				  MainFields.getIntervalCase() == 3)) 
+		{
+			upperClassLimitTxtF.setDisable(true);
+		} else {
+			upperClassLimitTxtF.setDisable(false);	
+		}
+		
+		clearTextFields();
+	}
+	
+	@FXML
+	private void clearTextFields() {
+		lowerClassLimitTxtF.clear();
+		upperClassLimitTxtF.clear();;
+		frequencyTxtF.clear();;
+	}
 	
 }

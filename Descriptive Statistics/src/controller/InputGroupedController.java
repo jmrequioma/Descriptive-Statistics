@@ -48,6 +48,18 @@ public class InputGroupedController implements Initializable {
 			inputK = Integer.valueOf(txtFInputK.getText());
 			MainFields.setGroupedDataK(inputK);
 			
+			if (closedRBtn.isSelected()) {
+				MainFields.setIntervalCase(0);
+			} else if (fOpenRBtn.isSelected()) {
+				MainFields.setIntervalCase(1);
+			} else if (lOpenRBtn.isSelected()) {
+				MainFields.setIntervalCase(2);
+			} else {
+				MainFields.setIntervalCase(3);
+			}
+			System.out.println("interval case: " + MainFields.getIntervalCase());
+			System.out.println("k: " + inputK);
+
 			Parent root = FXMLLoader.load(getClass().getResource("/view/InputGroupedData.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add("/theme/bloodcrimson.css");
@@ -63,19 +75,6 @@ public class InputGroupedController implements Initializable {
 			alert.setContentText("Ooops, input is not allowed! Please change the input.");
 			alert.showAndWait();
 		}
-		if (closedRBtn.isSelected()) {
-			MainFields.setIntervalCase(0);
-		} else if (fOpenRBtn.isSelected()) {
-			MainFields.setIntervalCase(1);
-		} else if (lOpenRBtn.isSelected()) {
-			MainFields.setIntervalCase(2);
-		} else {
-			MainFields.setIntervalCase(3);
-		}
-		System.out.println("interval case: " + MainFields.getIntervalCase());
-		System.out.println("k: " + inputK);
-		
-
 	}
 
 	@Override
