@@ -18,14 +18,7 @@ public class MainFields {
 	private static boolean floatExists;
 	private static ArrayList<Integer> sampleDataInt;
 	private static ArrayList<String> fusedData;
-//	private static ArrayList<Integer> dataCount;
-//	private static ArrayList<Float> dataPercentage;
 	private static ArrayList<Float> sampleDataFloat;
-	private static ArrayList<String> classLimits;
-	private static ArrayList<String> trueClassLimits;
-	private static ArrayList<String> midpoints;
-	private static ArrayList<Integer> frequencies;
-	private static ArrayList<Float> percentages;
 	private static int intervalCase;   // 0 for closed, 1 for open first, 2 for open last, 3 for open both
 	private static int groupedDataK;
 	private static ArrayList<String> lowerClassLimitsList; // newly added
@@ -107,68 +100,12 @@ public class MainFields {
 		MainFields.fusedData = fusedData;
 	}
 
-//	public static ArrayList<Integer> getDataCount() {
-//		return dataCount;
-//	}
-//
-//	public static void setDataCount(ArrayList<Integer> dataCount) {
-//		MainFields.dataCount = dataCount;
-//	}
-
-//	public static ArrayList<Float> getDataPercentage() {
-//		return dataPercentage;
-//	}
-//
-//	public static void setDataPercentage(ArrayList<Float> dataPercentage) {
-//		MainFields.dataPercentage = dataPercentage;
-//	}
-
 	public static ArrayList<Float> getSampleDataFloat() {
 		return sampleDataFloat;
 	}
 
 	public static void setSampleDataFloat(ArrayList<Float> sampleDataFloat) {
 		MainFields.sampleDataFloat = sampleDataFloat;
-	}
-
-	public static ArrayList<String> getClassLimits() {
-		return classLimits;
-	}
-
-	public static void setClassLimits(ArrayList<String> classLimits) {
-		MainFields.classLimits = classLimits;
-	}
-
-	public static ArrayList<String> getTrueClassLimits() {
-		return trueClassLimits;
-	}
-
-	public static void setTrueClassLimits(ArrayList<String> trueClassLimits) {
-		MainFields.trueClassLimits = trueClassLimits;
-	}
-
-	public static ArrayList<String> getMidpoints() {
-		return midpoints;
-	}
-
-	public static void setMidpoints(ArrayList<String> midpoints) {
-		MainFields.midpoints = midpoints;
-	}
-
-	public static ArrayList<Integer> getFrequencies() {
-		return frequencies;
-	}
-
-	public static void setFrequencies(ArrayList<Integer> frequencies) {
-		MainFields.frequencies = frequencies;
-	}
-
-	public static ArrayList<Float> getPercentages() {
-		return percentages;
-	}
-
-	public static void setPercentages(ArrayList<Float> percentages) {
-		MainFields.percentages = percentages;
 	}
 
 	public static boolean getIntExists() {
@@ -253,19 +190,22 @@ public class MainFields {
 
 	public static void reset() {
 		//eventBus.unregister(collapseListener);
+		if(type.equals("Grouped")) {
+			lowerClassLimitsList.clear();
+			upperClassLimitsList.clear();
+			frequencyList.clear();
+		}
 		type = "";
 		title = "";
 		valid = false;
-		sampleDataInt.clear();
-		//fusedData.clear();
-		//dataCount.clear();
-		//dataPercentage.clear();
-		sampleDataFloat.clear();
-		classLimits.clear();
-		trueClassLimits.clear();
-		midpoints.clear();
-		frequencies.clear();
-		percentages.clear();
+		if(dataType.equals("Integer")) {
+			sampleDataInt.clear();	
+		} else {
+			sampleDataFloat.clear();	
+		}		
+		
+		
+
 	}
 	
 	public static void resetChoices() {
