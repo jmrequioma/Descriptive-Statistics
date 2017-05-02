@@ -250,8 +250,23 @@ public class OutputController implements Initializable {
 				medCol.setCellValueFactory(new PropertyValueFactory
 						<Median, String>("median"));
 			}
-			if (MainFields.isMode() && MainFields.getIntervalCase() == 0) {
+			if (MainFields.isMode()) {
+				System.out.println("hi");
+				ArrayList<String> frequencyList = MainFields.getFrequencyList();
 				
+				if(noMode(frequencyList)) {
+					System.out.println("hello");
+					modeTable.getItems().add(new Median("", "No mode"));
+				} else {
+					ArrayList<Integer> indexOfMode = getModeIndexes(frequencyList);
+					String modes = modesRepresent(indexOfMode);
+					System.out.println(modes);
+					modeTable.getItems().add(new Median(modes, modalValue(indexOfMode)));
+				}
+				modeCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("median"));
+				charCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("range"));
 			}
 			
 			if (MainFields.isMean() && MainFields.getIntervalCase() > 0) {
@@ -273,6 +288,72 @@ public class OutputController implements Initializable {
 				medCol.setCellValueFactory(new PropertyValueFactory
 						<Median, String>("median"));
 			}
+		}
+	}
+	
+	private boolean noMode(ArrayList<String> frequencyList) {
+		
+		if(frequencyList.size() == 0) {
+			return true;
+		}
+		
+		int first = Integer.valueOf(frequencyList.get(0));
+		
+		for(int i = 1; i < frequencyList.size(); i++) {
+			int frequencyInt = Integer.valueOf(frequencyList.get(i));
+			if(frequencyInt != first) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private ArrayList<Integer> getModeIndexes(ArrayList<String> frequencyList) {
+		ArrayList<Integer> modeIndexes = new ArrayList<Integer>();
+		int maxFrequency = getMaxFrequency(frequencyList);
+		
+		for(int i = 0; i < frequencyList.size(); i++) {
+			int frequencyInt = Integer.valueOf(frequencyList.get(i));
+			
+			if(maxFrequency == frequencyInt) {
+				modeIndexes.add(i);
+			}
+		}
+		
+		return modeIndexes;
+	}
+	
+	private int getMaxFrequency(ArrayList<String> frequencyList) {
+		int maxFrequency = Integer.valueOf(frequencyList.get(0));
+		
+		for(int i = 1; i < frequencyList.size(); i++) {
+			int frequencyInt = Integer.valueOf(frequencyList.get(i));
+			if(frequencyInt > maxFrequency) {
+				maxFrequency = frequencyInt;
+			}
+		}
+		
+		return maxFrequency;
+	}
+	
+	private String modesRepresent(ArrayList<Integer> indexOfMode) {
+		String modes = "";
+		
+		for(Integer index : indexOfMode) {
+			modes += MainFields.getLowerClassLimitsList().get(index) + " - " + 
+					 MainFields.getUpperClassLimitsList().get(index) + ", ";
+		}
+		
+		return modes;
+	}
+	
+	private String modalValue(ArrayList<Integer> indexOfMode) {
+		if(indexOfMode.size() == 1) {
+			return "unimodal";
+		} else if(indexOfMode.size() == 2) {
+			return "bimodal";
+		} else {
+			return "multimodal";
 		}
 	}
 	

@@ -198,11 +198,13 @@ public class MainFields {
 		type = "";
 		title = "";
 		valid = false;
-		if(dataType.equals("Integer")) {
-			sampleDataInt.clear();	
-		} else {
-			sampleDataFloat.clear();	
-		}		
+		if(type.equals("Ungrouped")) {
+			if(dataType.equals("Integer")) {
+				sampleDataInt.clear();	
+			} else {
+				sampleDataFloat.clear();	
+			}
+		}
 	}
 	
 	public static void resetChoices() {
