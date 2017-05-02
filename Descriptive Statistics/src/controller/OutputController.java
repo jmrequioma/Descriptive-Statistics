@@ -227,7 +227,14 @@ public class OutputController implements Initializable {
 						<Median, String>("range"));
 			}
 		} else {
-			
+			if (MainFields.isMean()) {
+				double meanInt = (MainFields.getFixiTotal() / MainFields.getFrequencyTotal());
+				double meanVar = calculateVariance(meanInt, MainFields.getSampleDataFloat());
+				double meanStanDev = Math.sqrt(meanVar);
+				DecimalFormat df = new DecimalFormat("#.###");
+				meanCol.setCellValueFactory(new PropertyValueFactory
+						<Mean, String>("mean"));
+			}
 		}
 	}
 	
@@ -414,6 +421,7 @@ public class OutputController implements Initializable {
 	}
 	
 	public void returnClick(ActionEvent e) throws IOException {
+		MainFields.resetChoices();
 		MainFields.reset();
 		Parent root = FXMLLoader.load(getClass().getResource("/view/Menu.fxml"));
 		Stage stage = (Stage) returnBtn.getScene().getWindow();
