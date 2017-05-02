@@ -203,9 +203,6 @@ public class MainFields {
 		} else {
 			sampleDataFloat.clear();	
 		}		
-		
-		
-
 	}
 	
 	public static void resetChoices() {
