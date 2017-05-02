@@ -227,14 +227,33 @@ public class OutputController implements Initializable {
 						<Median, String>("range"));
 			}
 		} else {
-			if (MainFields.isMean()) {
+			if (MainFields.isMean() && MainFields.getIntervalCase() == 0) {
 				double meanInt = (MainFields.getFixiTotal() / MainFields.getFrequencyTotal());
-				double meanVar = calculateVariance(meanInt, MainFields.getSampleDataFloat());
+				double meanVar = (MainFields.getFrequencyTotal() * MainFields.getFixi2Total()) - (Math.pow((MainFields.getFixiTotal()), 2)) / (MainFields.getFrequencyTotal() * (MainFields.getFrequencyTotal() - 1));
 				double meanStanDev = Math.sqrt(meanVar);
 				DecimalFormat df = new DecimalFormat("#.###");
+				meanVar = Double.valueOf(df.format(meanVar));
+				meanStanDev = Double.valueOf(df.format(meanStanDev));
+				meanInt = Double.valueOf(df.format(meanStanDev));
+				presentMean(meanInt, meanVar, meanStanDev);
 				meanCol.setCellValueFactory(new PropertyValueFactory
 						<Mean, String>("mean"));
+				varCol.setCellValueFactory(new PropertyValueFactory
+						<Mean, String>("variance"));
+				sdCol.setCellValueFactory(new PropertyValueFactory
+						<Mean, String>("stanDev"));
 			}
+			if (MainFields.isMedian() && MainFields.getIntervalCase() == 0) {
+				String median = "Median not computed.";
+				medianTable.getItems().add(
+						new Median(median, "No median"));
+				medCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("median"));
+			}
+			if (MainFields.isMode() && MainFields.getIntervalCase() == 0) {
+				
+			}
+			
 		}
 	}
 	
