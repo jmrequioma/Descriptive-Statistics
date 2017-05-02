@@ -95,6 +95,7 @@ public class ComputationTableController implements Initializable {
 			fixiTotal = getTotalFloat(fixiList);
 			MainFields.setFixiTotal(Float.valueOf(fixiTotal));
 			fixi2Total = getTotalFloat(fixi2List);
+			MainFields.setFixi2Total(Float.valueOf(fixi2Total));
 		}
 
 		groupedData.getItems().add(new GroupedData("", "", "total: " + frequencyTotal, "", 
