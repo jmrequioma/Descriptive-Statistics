@@ -10,11 +10,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import main.GroupedData;
@@ -92,9 +94,41 @@ public class InputGroupedDataController implements Initializable {
 		String upperClassLimitVal = upperClassLimitTxtF.getText();
 		String frequencyVal = frequencyTxtF.getText();
 		
-		updateLists(classIntervalVal, lowerClassLimitVal, upperClassLimitVal, frequencyVal);
-		updateTable();
-		checkContinueEnable();
+		if(MainFields.getDataType().equals("Integer")) {
+			if(isNumber(lowerClassLimitVal, upperClassLimitVal) && 
+			   isInteger(lowerClassLimitVal, upperClassLimitVal)) {
+				updateLists(classIntervalVal, lowerClassLimitVal, upperClassLimitVal, frequencyVal);
+				updateTable();
+				checkContinueEnable();
+			} else {
+				showError();
+			}
+		} else {
+			if(isNumber(lowerClassLimitVal, upperClassLimitVal)) {
+				updateLists(classIntervalVal, lowerClassLimitVal, upperClassLimitVal, frequencyVal);
+				updateTable();
+				checkContinueEnable();
+			} else {
+				showError();
+			}
+		}
+		
+	}
+	
+	private boolean isNumber(String firstData, String secondData) {
+		return firstData.matches("[-+]?\\d*\\.?\\d+") && secondData.matches("[-+]?\\d*\\.?\\d+");
+	}
+	
+	private boolean isInteger(String firstData, String secondData) {
+		return !firstData.contains(".") && !secondData.contains(".");
+	}
+	
+	private void showError() {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Critical Error");
+		alert.setHeaderText("Invalid Click!!!");
+		alert.setContentText("Please add inputs.");
+		alert.showAndWait();
 	}
 	
 	private void updateLists(int classIntervalVal, String lowerClassLimit, String upperClassLimit, 
