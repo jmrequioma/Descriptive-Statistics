@@ -258,8 +258,6 @@ public class OutputController implements Initializable {
 				String mean = "Mean not computed.";
 				meanTable.getItems().add(
 						new Mean(mean, "No v", "No sd"));
-				meanTable.getItems().add(
-						new Mean(String.valueOf(mean), "", ""));
 				meanCol.setCellValueFactory(new PropertyValueFactory
 						<Mean, String>("mean"));
 			}
@@ -268,8 +266,6 @@ public class OutputController implements Initializable {
 				String median = "Median not computed.";
 				medianTable.getItems().add(
 						new Median(median, "No v"));
-				medianTable.getItems().add(
-						new Median(median, ""));
 				medCol.setCellValueFactory(new PropertyValueFactory
 						<Median, String>("median"));
 			}
