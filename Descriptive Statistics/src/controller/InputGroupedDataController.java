@@ -123,14 +123,6 @@ public class InputGroupedDataController implements Initializable {
 		return !data.contains(".");
 	}
 	
-	private boolean isNumber(String firstData, String secondData) {
-		return firstData.matches("[-+]?\\d*\\.?\\d+") && secondData.matches("[-+]?\\d*\\.?\\d+");
-	}
-	
-	private boolean isInteger(String firstData, String secondData) {
-		return !firstData.contains(".") && !secondData.contains(".");
-	}
-	
 	private void showError() {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Critical Error");
