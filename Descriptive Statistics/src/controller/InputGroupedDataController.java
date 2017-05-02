@@ -95,8 +95,8 @@ public class InputGroupedDataController implements Initializable {
 		String frequencyVal = frequencyTxtF.getText();
 		
 		if(MainFields.getDataType().equals("Integer")) {
-			if(isNumber(lowerClassLimitVal, upperClassLimitVal) && 
-			   isInteger(lowerClassLimitVal, upperClassLimitVal)) {
+			if((isNumber(lowerClassLimitVal) || classInterval.getValue() == 1) && (isNumber(upperClassLimitVal) || classInterval.getValue() == MainFields.getGroupedDataK()) && 
+			   isInteger(lowerClassLimitVal) && isInteger(upperClassLimitVal)) {
 				updateLists(classIntervalVal, lowerClassLimitVal, upperClassLimitVal, frequencyVal);
 				updateTable();
 				checkContinueEnable();
@@ -104,7 +104,7 @@ public class InputGroupedDataController implements Initializable {
 				showError();
 			}
 		} else {
-			if(isNumber(lowerClassLimitVal, upperClassLimitVal)) {
+			if((isNumber(lowerClassLimitVal) || classInterval.getValue() == 1) && (isNumber(upperClassLimitVal) || classInterval.getValue() == MainFields.getGroupedDataK())) {
 				updateLists(classIntervalVal, lowerClassLimitVal, upperClassLimitVal, frequencyVal);
 				updateTable();
 				checkContinueEnable();
@@ -115,12 +115,12 @@ public class InputGroupedDataController implements Initializable {
 		
 	}
 	
-	private boolean isNumber(String firstData, String secondData) {
-		return firstData.matches("[-+]?\\d*\\.?\\d+") && secondData.matches("[-+]?\\d*\\.?\\d+");
+	private boolean isNumber(String data) {
+		return data.matches("[-+]?\\d*\\.?\\d+");
 	}
 	
-	private boolean isInteger(String firstData, String secondData) {
-		return !firstData.contains(".") && !secondData.contains(".");
+	private boolean isInteger(String data) {
+		return !data.contains(".");
 	}
 	
 	private void showError() {
