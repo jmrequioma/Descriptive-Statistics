@@ -230,7 +230,7 @@ public class OutputController implements Initializable {
 		} else {   // grouped
 			if (MainFields.isMean() && MainFields.getIntervalCase() == 0) {
 				double meanInt = (MainFields.getFixiTotal() / MainFields.getFrequencyTotal());
-				double meanVar = (MainFields.getFrequencyTotal() * MainFields.getFixi2Total()) - (Math.pow((MainFields.getFixiTotal()), 2)) / (MainFields.getFrequencyTotal() * (MainFields.getFrequencyTotal() - 1));
+				double meanVar = (MainFields.getFixi2Total() / MainFields.getFrequencyTotal()) - (Math.pow(meanInt, 2));
 				double meanStanDev = Math.sqrt(meanVar);
 				DecimalFormat df = new DecimalFormat("#.###");
 				meanVar = Double.valueOf(df.format(meanVar));
