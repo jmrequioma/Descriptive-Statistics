@@ -135,7 +135,7 @@ public class OutputController implements Initializable {
 					charCol.setCellValueFactory(new PropertyValueFactory
 							<Median, String>("range"));
 				}
-			} else {
+			} else { // Integer
 				if (MainFields.isMean()) {
 					float totalVal = 0;
 					for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
@@ -184,49 +184,6 @@ public class OutputController implements Initializable {
 					rangeCol.setCellValueFactory(new PropertyValueFactory
 							<Median, String>("range"));
 				}
-			}
-			
-		} else {
-			if (MainFields.isMean() && MainFields.getIntervalCase() == 0) {
-				double meanInt = (MainFields.getFixiTotal() / MainFields.getFrequencyTotal());
-				double meanVar = (MainFields.getFrequencyTotal() * MainFields.getFixi2Total()) - (Math.pow((MainFields.getFixiTotal()), 2)) / (MainFields.getFrequencyTotal() * (MainFields.getFrequencyTotal() - 1));
-				double meanStanDev = Math.sqrt(meanVar);
-				DecimalFormat df = new DecimalFormat("#.###");
-				meanVar = Double.valueOf(df.format(meanVar));
-				meanStanDev = Double.valueOf(df.format(meanStanDev));
-				meanInt = Double.valueOf(df.format(meanInt));
-				presentMean(meanInt, meanVar, meanStanDev);
-				meanCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("mean"));
-				varCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("variance"));
-				sdCol.setCellValueFactory(new PropertyValueFactory
-						<Mean, String>("stanDev"));
-			}
-			if (MainFields.isMedian() && MainFields.getIntervalCase() == 0) {
-				String median = "Median not computed.";
-				medianTable.getItems().add(
-						new Median(median, "No median"));
-				medCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("median"));
-			}
-			if (MainFields.isMode()) {
-				System.out.println("hi");
-				ArrayList<String> frequencyList = MainFields.getFrequencyList();
-				
-				if(noMode(frequencyList)) {
-					System.out.println("hello");
-					modeTable.getItems().add(new Median("", "No mode"));
-				} else {
-					ArrayList<Integer> indexOfMode = getModeIndexes(frequencyList);
-					String modes = modesRepresent(indexOfMode);
-					System.out.println(modes);
-					modeTable.getItems().add(new Median(modes, modalValue(indexOfMode)));
-				}
-				modeCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("median"));
-				charCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("range"));
 				if (MainFields.isMode()) {
 					List<List<Integer>> modes = new ArrayList<List<Integer>>();
 					ArrayList<Integer> copy = new ArrayList<Integer>();
@@ -268,6 +225,49 @@ public class OutputController implements Initializable {
 					charCol.setCellValueFactory(new PropertyValueFactory
 							<Median, String>("range"));
 				}
+			}
+			
+		} else {   // grouped
+			if (MainFields.isMean() && MainFields.getIntervalCase() == 0) {
+				double meanInt = (MainFields.getFixiTotal() / MainFields.getFrequencyTotal());
+				double meanVar = (MainFields.getFrequencyTotal() * MainFields.getFixi2Total()) - (Math.pow((MainFields.getFixiTotal()), 2)) / (MainFields.getFrequencyTotal() * (MainFields.getFrequencyTotal() - 1));
+				double meanStanDev = Math.sqrt(meanVar);
+				DecimalFormat df = new DecimalFormat("#.###");
+				meanVar = Double.valueOf(df.format(meanVar));
+				meanStanDev = Double.valueOf(df.format(meanStanDev));
+				meanInt = Double.valueOf(df.format(meanInt));
+				presentMean(meanInt, meanVar, meanStanDev);
+				meanCol.setCellValueFactory(new PropertyValueFactory
+						<Mean, String>("mean"));
+				varCol.setCellValueFactory(new PropertyValueFactory
+						<Mean, String>("variance"));
+				sdCol.setCellValueFactory(new PropertyValueFactory
+						<Mean, String>("stanDev"));
+			}
+			if (MainFields.isMedian() && MainFields.getIntervalCase() == 0) {
+				String median = "Median not computed.";
+				medianTable.getItems().add(
+						new Median(median, "No median"));
+				medCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("median"));
+			}
+			if (MainFields.isMode()) {
+				System.out.println("hi");
+				ArrayList<String> frequencyList = MainFields.getFrequencyList();
+				
+				if(noMode(frequencyList)) {
+					System.out.println("hello");
+					modeTable.getItems().add(new Median("", "No mode"));
+				} else {
+					ArrayList<Integer> indexOfMode = getModeIndexes(frequencyList);
+					String modes = modesRepresent(indexOfMode);
+					System.out.println(modes);
+					modeTable.getItems().add(new Median(modes, modalValue(indexOfMode)));
+				}
+				modeCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("median"));
+				charCol.setCellValueFactory(new PropertyValueFactory
+						<Median, String>("range"));
 			}
 			
 			if (MainFields.isMean() && MainFields.getIntervalCase() > 0) {
