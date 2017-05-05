@@ -55,7 +55,7 @@ public class OutputController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		if (MainFields.getType() == "Ungrouped") {
-			if (MainFields.getDataType() == "Float") {
+			if (MainFields.getDataType().equals("Float")) {
 				for (int i = 0; i < MainFields.getSampleDataFloat().size(); i++) {
 					copy.add(MainFields.getSampleDataFloat().get(i));
 				}
@@ -185,47 +185,7 @@ public class OutputController implements Initializable {
 							<Median, String>("range"));
 				}
 			}
-			if (MainFields.isMode()) {
-				List<List<Integer>> modes = new ArrayList<List<Integer>>();
-				ArrayList<Integer> copy = new ArrayList<Integer>();
-				for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
-					copy.add(MainFields.getSampleDataInt().get(i));
-				}
-				Collections.sort(copy);
-				ArrayList<Integer> indices = new ArrayList<Integer>();
-				
-				//modes = mode(copy);
-				indices = lastOccurencesIndex(MainFields.getSampleDataFloat(), copy);
-				modes = groupData(copy, indices);
-				System.out.println("Checking: ");
-				for (int i = 0; i < modes.size(); i++) {
-					for (int j = 0; j < modes.get(i).size(); j++) {
-						System.out.print(modes.get(i).get(j) + " ");
-					}
-					System.out.println();
-				}
-				String strModes = getModes(dummy, modes);
-				int modeCtr = countModes(strModes);
-				System.out.println("strModes: " + strModes);
-				String chara = "";
-				if (modeCtr == 0 || checkEqualSize(modes, 0)) {
-					chara = "No mode";
-				} else if (modeCtr == 1) {
-					chara = "Unimodal";
-				} else if (modeCtr == 2) {
-					chara = "Bimodal";
-				} else {
-					chara = "Multi-modal";
-				}
-				if (chara == "No mode") {
-					strModes = "";
-				}
-				presentMode(strModes, chara);
-				modeCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("median"));
-				charCol.setCellValueFactory(new PropertyValueFactory
-						<Median, String>("range"));
-			}
+			
 		} else {
 			if (MainFields.isMean() && MainFields.getIntervalCase() == 0) {
 				double meanInt = (MainFields.getFixiTotal() / MainFields.getFrequencyTotal());
@@ -267,6 +227,47 @@ public class OutputController implements Initializable {
 						<Median, String>("median"));
 				charCol.setCellValueFactory(new PropertyValueFactory
 						<Median, String>("range"));
+				if (MainFields.isMode()) {
+					List<List<Integer>> modes = new ArrayList<List<Integer>>();
+					ArrayList<Integer> copy = new ArrayList<Integer>();
+					for (int i = 0; i < MainFields.getSampleDataInt().size(); i++) {
+						copy.add(MainFields.getSampleDataInt().get(i));
+					}
+					Collections.sort(copy);
+					ArrayList<Integer> indices = new ArrayList<Integer>();
+					
+					//modes = mode(copy);
+					indices = lastOccurencesIndex(MainFields.getSampleDataFloat(), copy);
+					modes = groupData(copy, indices);
+					System.out.println("Checking: ");
+					for (int i = 0; i < modes.size(); i++) {
+						for (int j = 0; j < modes.get(i).size(); j++) {
+							System.out.print(modes.get(i).get(j) + " ");
+						}
+						System.out.println();
+					}
+					String strModes = getModes(dummy, modes);
+					int modeCtr = countModes(strModes);
+					System.out.println("strModes: " + strModes);
+					String chara = "";
+					if (modeCtr == 0 || checkEqualSize(modes, 0)) {
+						chara = "No mode";
+					} else if (modeCtr == 1) {
+						chara = "Unimodal";
+					} else if (modeCtr == 2) {
+						chara = "Bimodal";
+					} else {
+						chara = "Multi-modal";
+					}
+					if (chara == "No mode") {
+						strModes = "";
+					}
+					presentMode(strModes, chara);
+					modeCol.setCellValueFactory(new PropertyValueFactory
+							<Median, String>("median"));
+					charCol.setCellValueFactory(new PropertyValueFactory
+							<Median, String>("range"));
+				}
 			}
 			
 			if (MainFields.isMean() && MainFields.getIntervalCase() > 0) {
