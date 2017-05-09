@@ -72,8 +72,8 @@ public class ComputationTableController implements Initializable {
 						    Float.valueOf(MainFields.getUpperClassLimitsList().get(i))) / 2);
 				fixi = String.valueOf(Float.valueOf(classMark) * 
 				       Float.valueOf(MainFields.getFrequencyList().get(i)));
-				fixi2 = String.valueOf(Float.valueOf(classMark) * 
-			      	    Math.pow(Float.valueOf(MainFields.getFrequencyList().get(i)), 2));
+				fixi2 = String.valueOf(Float.valueOf(MainFields.getFrequencyList().get(i)) * 
+			      	    Math.pow(Float.valueOf(classMark), 2));
 			}
 			
 			classMarksList.add(classMark);
